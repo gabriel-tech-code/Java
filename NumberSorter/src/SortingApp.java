@@ -101,6 +101,10 @@ public class SortingApp extends JFrame {
         // Copy lists for different methods
         List<Double> list1 = new ArrayList<>(numbers);
         List<Double> list2 = new ArrayList<>(numbers);
+        List<Double> list3 = new ArrayList<>(numbers);
+        List<Double> list4 = new ArrayList<>(numbers);
+        List<Double> list5 = new ArrayList<>(numbers);
+        List<Double> list6 = new ArrayList<>(numbers);
 
         // ---- DO-WHILE SORT ----
         long start1 = System.nanoTime();
@@ -122,20 +126,29 @@ public class SortingApp extends JFrame {
 
         // ---- MERGE SORT ----
         long start3 = System.nanoTime();
-        mergeSort(list2, ascending);
+        mergeSort(list3, ascending);
         long end3 = System.nanoTime();
 
         // ---- SELECTION SORT ----
         long start4 = System.nanoTime();
-        selectionSort(list2, ascending);
+        selectionSort(list4, ascending);
         long end4 = System.nanoTime();
 
         // ---- BOZO SORT (for fun) ----
-        List<Double> bozoList = new ArrayList<>(numbers);
         
         long start5 = System.nanoTime();
-        boolean bozoSuccess = bozoSort(bozoList, ascending);
+        boolean bozoSuccess = bozoSort(list5, ascending);
         long end5 = System.nanoTime();
+
+        // ---- QUICK SORT (not displayed in results, but available for testing) ----
+        long start6 = System.nanoTime();
+        quickSort(list6, ascending);
+        long end6 = System.nanoTime();
+
+        // ---- HEAP SORT (not displayed in results, but available for testing) ----
+        long start7 = System.nanoTime();
+        heapSort(list6, ascending);
+        long end7 = System.nanoTime();
 
 
 
@@ -144,11 +157,12 @@ public class SortingApp extends JFrame {
 
         outputArea.setText(type.toLowerCase()  + "\n\n" +  formatList(list1) +
             "\n\n\t\t Algorithms" + 
-            "\n\t\t\tTime spent: hh:mm:ss:ms:nnnnnn" +
             "\nlambda (λ)\t\t\tTime spent: " + formatTime(end2 - start2) +
             "\ndo-while loop (O(n^2))\t\tTime spent: " + formatTime(end1 - start1) +
             "\nmerge sort (O(n log n))\t\tTime spent: " + formatTime(end3 - start3) +
             "\nselection sort (O(n^2))\t\tTime spent: " + formatTime(end4 - start4) +
+            "\nquick sort (O(n log n))\t\tTime spent: " + formatTime(end6 - start6) +
+            "\nheap sort (O(n log n))\t\tTime spent: " + formatTime(end7 - start7) +
             (bozoSuccess ? "\nbozo sort (O((n+1)!))\t\tTime spent: " + formatTime(end5 - start5) : 
             "\nbozo sort (O((n+1)!))\t\tTime spent: Failed after 1 million attempts")
             );
@@ -293,6 +307,85 @@ public class SortingApp extends JFrame {
             }
         }
         return true;
+    }
+    // Quick Sort Implementation (not used in main, but available for testing)
+    public static void quickSort(List<Double> list, boolean ascending) {
+        quickSortHelper(list, 0, list.size() - 1, ascending);
+    }
+
+    private static void quickSortHelper(List<Double> list, int low, int high, boolean ascending) {
+        if (low < high) {
+            int pi = partition(list, low, high, ascending);
+
+            quickSortHelper(list, low, pi - 1, ascending);
+            quickSortHelper(list, pi + 1, high, ascending);
+        }
+    }
+
+    private static int partition(List<Double> list, int low, int high, boolean ascending) {
+        double pivot = list.get(high);
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if ((ascending && list.get(j) <= pivot) ||
+                (!ascending && list.get(j) >= pivot)) {
+
+                i++;
+                swap(list, i, j);
+            }
+        }
+
+        swap(list, i + 1, high);
+        return i + 1;
+    }
+    // Heap sort and other algorithms can be added similarly if needed
+    public static void heapSort(List<Double> list, boolean ascending) {
+        int n = list.size();
+
+        // Build heap
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            heapify(list, n, i, ascending);
+        }
+
+        // Extract elements
+        for (int i = n - 1; i > 0; i--) {
+            swap(list, 0, i);
+            heapify(list, i, 0, ascending);
+        }
+    }
+
+    private static void heapify(List<Double> list, int n, int i, boolean ascending) {
+        int extreme = i; // largest or smallest
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (ascending) {
+            // Max heap
+            if (left < n && list.get(left) > list.get(extreme)) {
+                extreme = left;
+            }
+            if (right < n && list.get(right) > list.get(extreme)) {
+                extreme = right;
+            }
+        } else {
+            // Min heap
+            if (left < n && list.get(left) < list.get(extreme)) {
+                extreme = left;
+            }
+            if (right < n && list.get(right) < list.get(extreme)) {
+                extreme = right;
+            }
+        }
+
+        if (extreme != i) {
+            swap(list, i, extreme);
+            heapify(list, n, extreme, ascending);
+        }
+    }
+    private static void swap(List<Double> list, int i, int j) {
+        Double temp = list.get(i);
+        list.set(i, list.get(j));
+        list.set(j, temp);
     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(SortingApp::new);

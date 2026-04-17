@@ -52,6 +52,17 @@ This project demonstrates differences in algorithm efficiency, execution time, a
     - Randomly swaps elements until the list is sorted
     - Time Complexity: O((n+1)!)
     - Extremely inefficient and used for demonstration purposes only
+6. Quick Sort
+    - Divide-and-conquer algorithm
+    - Selects a pivot and partitions the list into smaller and larger elements
+    - Time Complexity: O(n log n) average, O(n²) worst case
+    - Very fast in practice and widely used
+---
+7. Heap Sort
+    - Uses a binary heap data structure
+    - Builds a heap and repeatedly extracts the maximum (or minimum) element
+    - Time Complexity: O(n log n)
+    - Consistent performance but slightly slower than Quick Sort in practice
 
 
 ## Algorithm Complexity
@@ -62,6 +73,8 @@ This project demonstrates differences in algorithm efficiency, execution time, a
 | Do-While | O(n²) |
 | Merge Sort | O(n log n) |
 | Selection Sort | O(n²) |
+| Quick Sort | O(n log n) |
+| Heap Sort | O(n log n) |
 | Bozo Sort | O((n+1)!) |
 
 ## Performance Measurement
@@ -85,6 +98,8 @@ do-while loop           time spent 00:00:00:004
 lambda sort             time spent 00:00:00:001
 merge sort              time spent 00:00:00:002
 selection sort          time spent 00:00:00:003
+quick sort              time spent 00:00:00:002
+heap sort               time spent 00:00:00:003
 bozo sort               time spent 00:00:10:532
 ```
 ## Notes
